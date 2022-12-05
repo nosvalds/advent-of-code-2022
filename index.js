@@ -2,26 +2,28 @@ import { assert } from 'console'
 import fs from 'fs'
 
 
-const getMaxCalories = (filePath) => {
+const getTopThreeCalsTotal = (filePath) => {
 
     const file = fs.readFileSync(filePath)
 
-    const fileArray = file.toString().split('\n')
-
-    let maxCals = 0
+    let fileArray = file.toString().split('\n')
+    fileArray.push('')
+    let elfCals = []
     fileArray.reduce((acc, value) => {
         if (value !== '') {
             acc += Number(value)
         } else {
-            maxCals = maxCals > acc ? maxCals : acc
+            elfCals.push(acc)
             acc = 0
         }
         return acc
     },0)
-    return maxCals
+    return elfCals.sort((a,b) => b -a ).slice(0,3).reduce((total, val) => total + val)
 }
 
-// Test 1
-assert(getMaxCalories('example_input.txt') === 24000)
-// Answer 1
-console.log(`Answer 1: ${getMaxCalories('input.txt')}`)
+// Test 2
+console.log(getTopThreeCalsTotal('example_input.txt'))
+assert(getTopThreeCalsTotal('example_input.txt') === 45000)
+// Answer 2
+console.log(`Answer 2: ${getTopThreeCalsTotal('input.txt')}`)
+
